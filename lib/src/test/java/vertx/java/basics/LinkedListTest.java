@@ -29,7 +29,7 @@ public class LinkedListTest {
     }
 
     @Test
-    void canAppenMultipleElements(){
+    void canAppendMultipleElements(){
         LinkedList liste = LinkedList.empty().append(1).append(2).append(3);
 
         assertEquals(3, liste.count());
