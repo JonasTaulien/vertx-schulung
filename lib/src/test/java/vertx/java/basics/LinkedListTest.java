@@ -22,7 +22,7 @@ public class LinkedListTest {
     }
 
     @Test
-    void isEmptyAfterAppendingElement(){
+    void isNotEmptyAfterAppendingElement(){
         LinkedList liste = LinkedList.empty().append(1);
 
         assertFalse(liste.isEmpty());
