@@ -10,7 +10,23 @@ public abstract class LinkedList {
 
     public abstract boolean isEmpty();
 
-    public abstract LinkedList append(int element);
+
+
+    public LinkedList append(int element) {
+        return new Element(element, this);
+    }
+
+
+
+    public abstract int get(int index) throws IndexOutOfBoundsException;
+
+
+
+    protected abstract int getWithCount(int index, int count) throws IndexOutOfBoundsException;
+
+
+
+    public abstract int count();
 
 
 
@@ -24,8 +40,22 @@ public abstract class LinkedList {
 
 
         @Override
-        public LinkedList append(int element) {
-            return new Element(element, this);
+        public int get(int index) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+
+
+
+        @Override
+        protected int getWithCount(int index, int count) throws IndexOutOfBoundsException {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+
+
+
+        @Override
+        public int count() {
+            return 0;
         }
     }
 
@@ -52,8 +82,28 @@ public abstract class LinkedList {
 
 
         @Override
-        public LinkedList append(int element) {
-            return null;
+        public int get(int index) throws IndexOutOfBoundsException {
+            int numberOfElements = this.count();
+            return this.getWithCount(index, numberOfElements);
+        }
+
+
+
+        @Override
+        protected int getWithCount(int index, int count) throws IndexOutOfBoundsException {
+            if (index == (count - 1)) {
+                return this.content;
+
+            } else {
+                return this.next.getWithCount(index, count - 1);
+            }
+        }
+
+
+
+        @Override
+        public int count() {
+            return 1 + this.next.count();
         }
     }
 }

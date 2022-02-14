@@ -34,4 +34,6 @@ public class LinkedListTest {
 
         assertEquals(3, liste.count());
     }
+
+    // TODO: Tests für get()
 }
