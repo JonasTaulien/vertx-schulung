@@ -1,9 +1,9 @@
 package vertx.java.basics;
 
-public abstract class LinkedList {
+public abstract class LinkedList<E> {
 
-    public static LinkedList empty() {
-        return new Empty();
+    public static <E> LinkedList<E> empty() {
+        return new Empty<E>();
     }
 
 
@@ -12,17 +12,17 @@ public abstract class LinkedList {
 
 
 
-    public LinkedList append(int element) {
-        return new Element(element, this);
+    public LinkedList<E> append(E element) {
+        return new Element<E>(element, this);
     }
 
 
 
-    public abstract int get(int index) throws IndexOutOfBoundsException;
+    public abstract E get(int index) throws IndexOutOfBoundsException;
 
 
 
-    protected abstract int getWithCount(int index, int count) throws IndexOutOfBoundsException;
+    protected abstract E getWithCount(int index, int count) throws IndexOutOfBoundsException;
 
 
 
@@ -30,7 +30,7 @@ public abstract class LinkedList {
 
 
 
-    private static class Empty extends LinkedList {
+    private static class Empty<E> extends LinkedList<E> {
 
         @Override
         public boolean isEmpty() {
@@ -40,14 +40,14 @@ public abstract class LinkedList {
 
 
         @Override
-        public int get(int index) {
+        public E get(int index) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
 
 
 
         @Override
-        protected int getWithCount(int index, int count) throws IndexOutOfBoundsException {
+        protected E getWithCount(int index, int count) throws IndexOutOfBoundsException {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
 
@@ -59,15 +59,15 @@ public abstract class LinkedList {
         }
     }
 
-    private static class Element extends LinkedList {
+    private static class Element<E> extends LinkedList<E> {
 
-        private final int content;
+        private final E content;
 
-        private final LinkedList next;
+        private final LinkedList<E> next;
 
 
 
-        private Element(int content, LinkedList next) {
+        private Element(E content, LinkedList<E> next) {
             this.content = content;
             this.next = next;
         }
@@ -82,7 +82,7 @@ public abstract class LinkedList {
 
 
         @Override
-        public int get(int index) throws IndexOutOfBoundsException {
+        public E get(int index) throws IndexOutOfBoundsException {
             int numberOfElements = this.count();
             return this.getWithCount(index, numberOfElements);
         }
@@ -90,7 +90,7 @@ public abstract class LinkedList {
 
 
         @Override
-        protected int getWithCount(int index, int count) throws IndexOutOfBoundsException {
+        protected E getWithCount(int index, int count) throws IndexOutOfBoundsException {
             if (index == (count - 1)) {
                 return this.content;
 
