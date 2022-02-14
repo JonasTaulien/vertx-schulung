@@ -1,5 +1,7 @@
 package vertx.java.basics;
 
+import java.util.Objects;
+
 public abstract class LinkedList<E> {
 
     public static <E> LinkedList<E> empty() {
@@ -27,6 +29,8 @@ public abstract class LinkedList<E> {
 
 
     public abstract int count();
+
+    public abstract LinkedList<E> filter(Predicate<E> predicate);
 
 
 
@@ -56,6 +60,20 @@ public abstract class LinkedList<E> {
         @Override
         public int count() {
             return 0;
+        }
+
+
+
+        @Override
+        public LinkedList<E> filter(Predicate<E> predicate) {
+            return this;
+        }
+
+
+
+        @Override
+        public boolean equals(Object o) {
+            return (o instanceof Empty<?>);
         }
     }
 
@@ -104,6 +122,38 @@ public abstract class LinkedList<E> {
         @Override
         public int count() {
             return 1 + this.next.count();
+        }
+
+
+
+        @Override
+        public LinkedList<E> filter(Predicate<E> predicate) {
+            if(predicate.apply(this.content)){
+                return new Element<>(this.content, this.next.filter(predicate));
+
+            } else {
+                return this.next.filter(predicate);
+            }
+        }
+
+
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Element<?> element = (Element<?>) o;
+            return Objects.equals(content, element.content) && Objects.equals(next, element.next);
+        }
+
+
+
+        @Override public int hashCode() {
+            return Objects.hash(content, next);
         }
     }
 }
