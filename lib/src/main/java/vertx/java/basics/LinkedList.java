@@ -5,7 +5,7 @@ import java.util.Objects;
 public abstract class LinkedList<E> {
 
     public static <E> LinkedList<E> empty() {
-        return new Empty<E>();
+        return new Empty<>();
     }
 
 
@@ -15,7 +15,7 @@ public abstract class LinkedList<E> {
 
 
     public LinkedList<E> append(E element) {
-        return new Element<E>(element, this);
+        return new Element<>(element, this);
     }
 
 
@@ -24,7 +24,7 @@ public abstract class LinkedList<E> {
 
 
 
-    protected abstract E getWithCount(int index, int count) throws IndexOutOfBoundsException;
+    protected abstract E getInternal(int index, int count) throws IndexOutOfBoundsException;
 
 
 
@@ -51,7 +51,7 @@ public abstract class LinkedList<E> {
 
 
         @Override
-        protected E getWithCount(int index, int count) throws IndexOutOfBoundsException {
+        protected E getInternal(int index, int count) throws IndexOutOfBoundsException {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
 
@@ -102,18 +102,18 @@ public abstract class LinkedList<E> {
         @Override
         public E get(int index) throws IndexOutOfBoundsException {
             int numberOfElements = this.count();
-            return this.getWithCount(index, numberOfElements);
+            return this.getInternal(index, numberOfElements - 1);
         }
 
 
 
         @Override
-        protected E getWithCount(int index, int count) throws IndexOutOfBoundsException {
-            if (index == (count - 1)) {
+        protected E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException {
+            if (index == indexOfCurrentElement) {
                 return this.content;
 
             } else {
-                return this.next.getWithCount(index, count - 1);
+                return this.next.getInternal(index, indexOfCurrentElement - 1);
             }
         }
 
