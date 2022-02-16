@@ -4,22 +4,42 @@ import java.util.Objects;
 
 public abstract class LinkedList<E> {
 
+    /**
+     * @param <E> the element type
+     * @return an empty LinkedList
+     */
     public static <E> LinkedList<E> empty() {
         return new Empty<>();
     }
 
 
 
+    /**
+     * @return true if this LinkedList is empty, otherwise false
+     */
     public abstract boolean isEmpty();
 
 
 
+    /**
+     * @param element the element to append
+     *
+     * @return a new LinkedList with the same contents as this LinkedList but with the new element added to the end
+     */
     public LinkedList<E> append(E element) {
         return new Element<>(element, this);
     }
 
 
 
+    /**
+     * @param index index of the element to return
+     *
+     * @return the element at the specified index (first element has the index 0)
+     *
+     * @throws IndexOutOfBoundsException if this LinkedList is empty or if it is not large enough to have an element
+     *                                   at the given index
+     */
     public abstract E get(int index) throws IndexOutOfBoundsException;
 
 
@@ -28,14 +48,30 @@ public abstract class LinkedList<E> {
 
 
 
+    /**
+     * @return the number of elements in this list
+     */
     public abstract int count();
 
 
 
+    /**
+     * @param predicate the predicate to test each element
+     *
+     * @return a new LinkedList with the same contents as this LinkedList but without all elements where the given
+     *         predicate returned false
+     */
     public abstract LinkedList<E> filter(Predicate<E> predicate);
 
 
 
+    /**
+     * @param <F> the element type of the new list
+     * @param mapper the function to use for transforming each element
+     *
+     * @return a new LinkedList where each of the elements of this LinkedList got transformed with the given mapper
+     *         function
+     */
     public abstract <F> LinkedList<F> map(Function<E, F> mapper);
 
 
