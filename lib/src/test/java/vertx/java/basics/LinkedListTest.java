@@ -38,10 +38,48 @@ public class LinkedListTest {
     void canAppendMultipleElements() {
         LinkedList<Integer> liste = LinkedList.<Integer>empty().append(1).append(2).append(3).append(5);
 
-        assertEquals(3, liste.count());
+        assertEquals(4, liste.count());
     }
 
-    // TODO: Tests für get()
+
+
+    @Test
+    void getEmptyList() {
+        assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> LinkedList.empty().get(0)
+        );
+    }
+
+
+
+    @Test
+    void getOutOfBounds() {
+        assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> LinkedList.empty().append(1).get(2)
+        );
+    }
+
+
+
+    @Test
+    void getFirst() {
+        assertEquals(
+                LinkedList.empty().append(1).get(0),
+                1
+        );
+    }
+
+
+
+    @Test
+    void getLast() {
+        assertEquals(
+                LinkedList.empty().append(1).append(2).get(1),
+                2
+        );
+    }
 
 
 
@@ -80,6 +118,8 @@ public class LinkedListTest {
         );
     }
 
+
+
     @Test
     void canFilterNumbersWithAbstractType() {
         LinkedList<Integer> liste = LinkedList.<Integer>empty()
@@ -98,6 +138,7 @@ public class LinkedListTest {
                                                  .append(3)
                                                  .append(1);
 
+        //noinspection Convert2Lambda,Convert2Diamond
         assertEquals(
                 expected,
                 liste.filter(new Predicate<Integer>() {
@@ -108,6 +149,7 @@ public class LinkedListTest {
                 })
         );
     }
+
 
 
     @Test
@@ -131,6 +173,7 @@ public class LinkedListTest {
         assertEquals(
                 expected,
                 liste.filter((Integer element) -> {
+                    //noinspection CodeBlock2Expr
                     return element < 4;
                 })
         );
@@ -162,16 +205,18 @@ public class LinkedListTest {
         );
     }
 
+
+
     @Test
     void canMap() {
         LinkedList<String> liste = LinkedList.<String>empty()
-                                              .append("Hallo")
-                                              .append("Ich")
-                                              .append("Bin")
-                                              .append("Eine")
-                                              .append("Tolle")
-                                              .append("Liste")
-                                              .append("!");
+                                             .append("Hallo")
+                                             .append("Ich")
+                                             .append("Bin")
+                                             .append("Eine")
+                                             .append("Tolle")
+                                             .append("Liste")
+                                             .append("!");
 
         LinkedList<Integer> expected = LinkedList.<Integer>empty()
                                                  .append(5)
@@ -184,17 +229,36 @@ public class LinkedListTest {
 
         assertEquals(
                 expected,
-                // TODO: map implementieren!
-                liste.map(new Function<String, Integer>(){
-
-                    @Override
-                    public Integer apply(String element) {
-                        return element.length();
-                    }
-                })
+                liste.map(String::length)
         );
-        // TODO: auch als lambda schreibweise!
     }
+
+
+
+    @Test
+    void mapFilter() {
+        LinkedList<String> list = LinkedList.<String>empty()
+                                            .append("723")
+                                            .append("12")
+                                            .append("1291")
+                                            .append("0")
+                                            .append("34")
+                                            .append("11")
+                                            .append("372");
+
+        LinkedList<Integer> expected = LinkedList.<Integer>empty()
+                                                 .append(12)
+                                                 .append(0)
+                                                 .append(34)
+                                                 .append(372);
+
+        assertEquals(
+                expected,
+                list.map(Integer::valueOf)
+                    .filter(num -> num % 2 == 0)
+        );
+    }
+
 
 
     private static class IsLessThan implements Predicate<Integer> {

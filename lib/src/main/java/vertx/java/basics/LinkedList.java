@@ -24,13 +24,19 @@ public abstract class LinkedList<E> {
 
 
 
-    protected abstract E getInternal(int index, int count) throws IndexOutOfBoundsException;
+    protected abstract E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException;
 
 
 
     public abstract int count();
 
+
+
     public abstract LinkedList<E> filter(Predicate<E> predicate);
+
+
+
+    public abstract <F> LinkedList<F> map(Function<E, F> mapper);
 
 
 
@@ -51,7 +57,7 @@ public abstract class LinkedList<E> {
 
 
         @Override
-        protected E getInternal(int index, int count) throws IndexOutOfBoundsException {
+        protected E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
 
@@ -71,9 +77,22 @@ public abstract class LinkedList<E> {
 
 
 
+        @Override public <F> LinkedList<F> map(Function<E, F> mapper) {
+            return LinkedList.empty();
+        }
+
+
+
         @Override
         public boolean equals(Object o) {
             return (o instanceof Empty<?>);
+        }
+
+
+
+        @Override
+        public String toString() {
+            return "";
         }
     }
 
@@ -128,12 +147,22 @@ public abstract class LinkedList<E> {
 
         @Override
         public LinkedList<E> filter(Predicate<E> predicate) {
-            if(predicate.apply(this.content)){
+            if (predicate.apply(this.content)) {
                 return new Element<>(this.content, this.next.filter(predicate));
 
             } else {
                 return this.next.filter(predicate);
             }
+        }
+
+
+
+        @Override
+        public <F> LinkedList<F> map(Function<E, F> mapper) {
+            return new Element<>(
+                    mapper.apply(this.content),
+                    this.next.map(mapper)
+            );
         }
 
 
@@ -152,8 +181,11 @@ public abstract class LinkedList<E> {
 
 
 
-        @Override public int hashCode() {
-            return Objects.hash(content, next);
+        @Override
+        public String toString() {
+            return this.next.isEmpty()
+                   ? Objects.toString(this.content)
+                   : this.next + "," + this.content;
         }
     }
 }
