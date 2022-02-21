@@ -258,6 +258,23 @@ public class LinkedListTest {
 
 
 
+    @Test
+    void canConcatLists() {
+        LinkedList<Integer> list1 = LinkedList.<Integer>empty().append(1).append(2).append(3).append(4).append(5);
+
+        LinkedList<Integer> list2 = LinkedList.<Integer>empty().append(6).append(7).append(8).append(9).append(10);
+
+        LinkedList<Integer> expected = LinkedList.<Integer>empty().append(1).append(2).append(3).append(4).append(5)
+                                                 .append(6).append(7).append(8).append(9).append(10);
+
+        assertEquals(
+                expected,
+                list1.appendAll(list2)
+        );
+    }
+
+
+
     private static class IsLessThan implements Predicate<Integer> {
 
         private final int upperNumber;

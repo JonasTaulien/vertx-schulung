@@ -77,6 +77,14 @@ public abstract class LinkedList<E> {
 
 
 
+    public abstract LinkedList<E> appendAll(LinkedList<E> list);
+
+
+
+    protected abstract LinkedList<E> prependAll(LinkedList<E> list);
+
+
+
     private static class Empty<E> extends LinkedList<E> {
 
         @Override
@@ -116,6 +124,19 @@ public abstract class LinkedList<E> {
 
         @Override public <F> LinkedList<F> map(Function<E, F> mapper) {
             return LinkedList.empty();
+        }
+
+
+
+        @Override
+        public LinkedList<E> appendAll(LinkedList<E> list) {
+            return list;
+        }
+
+
+
+        @Override protected LinkedList<E> prependAll(LinkedList<E> list) {
+            return list;
         }
 
 
@@ -207,6 +228,20 @@ public abstract class LinkedList<E> {
                     mapper.apply(this.content),
                     this.next.map(mapper)
             );
+        }
+
+
+
+        @Override
+        public LinkedList<E> appendAll(LinkedList<E> list) {
+            return list.prependAll(this);
+        }
+
+
+
+        @Override
+        public LinkedList<E> prependAll(LinkedList<E> list) {
+            return new Element<>(this.content, this.next.prependAll(list));
         }
 
 
