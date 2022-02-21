@@ -6,6 +6,7 @@ public abstract class LinkedList<E> {
 
     /**
      * @param <E> the element type
+     *
      * @return an empty LinkedList
      */
     public static <E> LinkedList<E> empty() {
@@ -66,7 +67,7 @@ public abstract class LinkedList<E> {
 
 
     /**
-     * @param <F> the element type of the new list
+     * @param <F>    the element type of the new list
      * @param mapper the function to use for transforming each element
      *
      * @return a new LinkedList where each of the elements of this LinkedList got transformed with the given mapper
@@ -122,6 +123,13 @@ public abstract class LinkedList<E> {
         @Override
         public boolean equals(Object o) {
             return (o instanceof Empty<?>);
+        }
+
+
+
+        @Override
+        public int hashCode() {
+            return Objects.hash();
         }
 
 
@@ -218,9 +226,16 @@ public abstract class LinkedList<E> {
 
 
         @Override
+        public int hashCode() {
+            return Objects.hash(content, next);
+        }
+
+
+
+        @Override
         public String toString() {
             return this.next.isEmpty()
-                   ? Objects.toString(this.content)
+                   ? "" + this.content
                    : this.next + "," + this.content;
         }
     }

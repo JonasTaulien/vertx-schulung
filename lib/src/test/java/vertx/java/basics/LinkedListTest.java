@@ -172,10 +172,7 @@ public class LinkedListTest {
 
         assertEquals(
                 expected,
-                liste.filter((Integer element) -> {
-                    //noinspection CodeBlock2Expr
-                    return element < 4;
-                })
+                liste.filter((Integer element) -> element < 4)
         );
     }
 
