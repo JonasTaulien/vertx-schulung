@@ -275,6 +275,62 @@ public class LinkedListTest {
 
 
 
+
+
+    @Test
+    void canFlatMap() {
+        LinkedList<String> list = LinkedList.<String>empty().append("Hallo").append("Ich")
+                                            .append("Bin").append("Toll!");
+
+        // Das hier:
+        LinkedList<LinkedList<Character>> actual = list.map(LinkedListTest::stringToList);
+        // ergibt das:
+        LinkedList.<LinkedList<Character>>empty()
+                .append(LinkedList.<Character>empty().append('H').append('a').append('l').append('l').append('o'))
+                .append(LinkedList.<Character>empty().append('I').append('c').append('h'))
+                .append(LinkedList.<Character>empty().append('B').append('i').append('n'))
+                .append(LinkedList.<Character>empty().append('T').append('o').append('l').append('l').append('!'));
+
+        // Aber wir wollen das hier, deshalb benötigen wir eine weitere Funktion flatMap()
+        LinkedList<Character> expected = LinkedList.<Character>empty()
+                                                   .append('H').append('a').append('l').append('l').append('o')
+                                                   .append('I').append('c').append('h')
+                                                   .append('B').append('i').append('n')
+                                                   .append('T').append('o').append('l').append('l').append('!');
+
+        // Function<E, LinkedList<F>> mapper
+        assertEquals(expected, list.flatMap(new Function<String, LinkedList<Character>>(){
+            @Override public LinkedList<Character> apply(String element) {
+                return stringToList(element);
+            }
+        }));
+
+        //TODO: flatMap implementieren (erst Methodenkopf, dann im Empty, dann im Element)
+        //TODO: flatMap oben mittels lambda-Rezept vereinfachen
+    }
+
+    @Test
+    void testStringToList(){
+        String str = "Hallo";
+
+        assertEquals(
+                LinkedList.<Character>empty().append('H').append('a').append('l').append('l').append('o'),
+                stringToList(str)
+        );
+    }
+
+    private static LinkedList<Character> stringToList(String str){
+        LinkedList<Character> chars = LinkedList.empty();
+
+        for (int i = 0; i < str.length(); ++i){
+            chars = chars.append(str.charAt(i));
+        }
+
+        return chars;
+    }
+
+
+
     private static class IsLessThan implements Predicate<Integer> {
 
         private final int upperNumber;
