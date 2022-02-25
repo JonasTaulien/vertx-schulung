@@ -1,6 +1,7 @@
 package vertx.java.basics;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class LinkedList<E> {
 
@@ -44,13 +45,18 @@ public abstract class LinkedList<E> {
     public abstract E get(int index) throws IndexOutOfBoundsException;
 
 
+    public abstract Optional<E> safeGet(int index);
+
+
 
     protected abstract E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException;
+
+    protected abstract Optional<E> safeGetInternal(int index, int indexOfCurrentElement);
 
 
 
     /**
-     * @return the number of elements in this list
+     * @return the number of elements in this LinkedList
      */
     public abstract int count();
 
@@ -67,8 +73,8 @@ public abstract class LinkedList<E> {
 
 
     /**
-     * @param <F>    the element type of the new list
      * @param mapper the function to use for transforming each element
+     * @param <F>    the element type of the new LinkedList
      *
      * @return a new LinkedList where each of the elements of this LinkedList got transformed with the given mapper
      *         function
@@ -77,6 +83,23 @@ public abstract class LinkedList<E> {
 
 
 
+    /**
+     * @param mapper the function to use for transforming each element into a LinkedList
+     * @param <F>    the element type of the new LinkedList
+     *
+     * @return a new LinkedList where each of the elements of this LinkedList got transformed into a LinkedList and
+     *         then all of those LinkedList got concatenated
+     */
+    public abstract <F> LinkedList<F> flatMap(Function<E, LinkedList<F>> mapper);
+
+
+
+    /**
+     * @param list the LinkedList to append
+     *
+     * @return a new LinkedList that contains all elements of this LinkedList and then all elements of the given
+     *         LinkedList
+     */
     public abstract LinkedList<E> appendAll(LinkedList<E> list);
 
 
@@ -102,8 +125,22 @@ public abstract class LinkedList<E> {
 
 
         @Override
+        public Optional<E> safeGet(int index) {
+            return Optional.empty();
+        }
+
+
+
+        @Override
         protected E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException {
             throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+
+
+
+        @Override
+        protected Optional<E> safeGetInternal(int index, int indexOfCurrentElement) {
+            return Optional.empty();
         }
 
 
@@ -123,6 +160,13 @@ public abstract class LinkedList<E> {
 
 
         @Override public <F> LinkedList<F> map(Function<E, F> mapper) {
+            return LinkedList.empty();
+        }
+
+
+
+        @Override
+        public <F> LinkedList<F> flatMap(Function<E, LinkedList<F>> mapper) {
             return LinkedList.empty();
         }
 
@@ -192,12 +236,33 @@ public abstract class LinkedList<E> {
 
 
         @Override
+        public Optional<E> safeGet(int index) {
+            int numberOfElements = this.count();
+
+            return this.safeGetInternal(index, numberOfElements - 1);
+        }
+
+
+
+        @Override
         protected E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException {
             if (index == indexOfCurrentElement) {
                 return this.content;
 
             } else {
                 return this.next.getInternal(index, indexOfCurrentElement - 1);
+            }
+        }
+
+
+
+        @Override
+        protected Optional<E> safeGetInternal(int index, int indexOfCurrentElement) {
+            if (index == indexOfCurrentElement) {
+                return Optional.of(this.content);
+
+            } else {
+                return this.next.safeGetInternal(index, indexOfCurrentElement - 1);
             }
         }
 
@@ -228,6 +293,13 @@ public abstract class LinkedList<E> {
                     mapper.apply(this.content),
                     this.next.map(mapper)
             );
+        }
+
+
+
+        @Override
+        public <F> LinkedList<F> flatMap(Function<E, LinkedList<F>> mapper) {
+            return mapper.apply(this.content).prependAll(this.next.flatMap(mapper));
         }
 
 

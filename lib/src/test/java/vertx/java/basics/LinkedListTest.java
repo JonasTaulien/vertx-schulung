@@ -275,8 +275,6 @@ public class LinkedListTest {
 
 
 
-
-
     @Test
     void canFlatMap() {
         LinkedList<String> list = LinkedList.<String>empty().append("Hallo").append("Ich")
@@ -286,10 +284,10 @@ public class LinkedListTest {
         LinkedList<LinkedList<Character>> actual = list.map(LinkedListTest::stringToList);
         // ergibt das:
         LinkedList.<LinkedList<Character>>empty()
-                .append(LinkedList.<Character>empty().append('H').append('a').append('l').append('l').append('o'))
-                .append(LinkedList.<Character>empty().append('I').append('c').append('h'))
-                .append(LinkedList.<Character>empty().append('B').append('i').append('n'))
-                .append(LinkedList.<Character>empty().append('T').append('o').append('l').append('l').append('!'));
+                  .append(LinkedList.<Character>empty().append('H').append('a').append('l').append('l').append('o'))
+                  .append(LinkedList.<Character>empty().append('I').append('c').append('h'))
+                  .append(LinkedList.<Character>empty().append('B').append('i').append('n'))
+                  .append(LinkedList.<Character>empty().append('T').append('o').append('l').append('l').append('!'));
 
         // Aber wir wollen das hier, deshalb benötigen wir eine weitere Funktion flatMap()
         LinkedList<Character> expected = LinkedList.<Character>empty()
@@ -299,18 +297,23 @@ public class LinkedListTest {
                                                    .append('T').append('o').append('l').append('l').append('!');
 
         // Function<E, LinkedList<F>> mapper
-        assertEquals(expected, list.flatMap(new Function<String, LinkedList<Character>>(){
+        //noinspection Convert2Lambda,Anonymous2MethodRef
+        assertEquals(expected, list.flatMap(new Function<String, LinkedList<Character>>() {
             @Override public LinkedList<Character> apply(String element) {
                 return stringToList(element);
             }
         }));
 
-        //TODO: flatMap implementieren (erst Methodenkopf, dann im Empty, dann im Element)
-        //TODO: flatMap oben mittels lambda-Rezept vereinfachen
+        //noinspection Convert2MethodRef
+        assertEquals(expected, list.flatMap(element -> stringToList(element)));
+
+        assertEquals(expected, list.flatMap(LinkedListTest::stringToList));
     }
 
+
+
     @Test
-    void testStringToList(){
+    void testStringToList() {
         String str = "Hallo";
 
         assertEquals(
@@ -319,10 +322,12 @@ public class LinkedListTest {
         );
     }
 
-    private static LinkedList<Character> stringToList(String str){
+
+
+    private static LinkedList<Character> stringToList(String str) {
         LinkedList<Character> chars = LinkedList.empty();
 
-        for (int i = 0; i < str.length(); ++i){
+        for (int i = 0; i < str.length(); ++i) {
             chars = chars.append(str.charAt(i));
         }
 
