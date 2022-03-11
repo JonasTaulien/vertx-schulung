@@ -81,6 +81,14 @@ public class LinkedListTest {
         );
     }
 
+    @Test
+    void getMid() {
+        assertEquals(
+                LinkedList.empty().append("Hallo").append("Ich").append("Bin").append("Ein").append("String").get(2),
+                "Bin"
+        );
+    }
+
 
 
     @Test

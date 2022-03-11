@@ -5,6 +5,16 @@ import java.util.Optional;
 
 public abstract class LinkedList<E> {
 
+    protected final int index;
+
+
+
+    private LinkedList(int index) {
+        this.index = index;
+    }
+
+
+
     /**
      * @param <E> the element type
      *
@@ -46,12 +56,6 @@ public abstract class LinkedList<E> {
 
 
     public abstract Optional<E> safeGet(int index);
-
-
-
-    protected abstract E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException;
-
-    protected abstract Optional<E> safeGetInternal(int index, int indexOfCurrentElement);
 
 
 
@@ -110,6 +114,12 @@ public abstract class LinkedList<E> {
 
     private static class Empty<E> extends LinkedList<E> {
 
+        private Empty() {
+            super(-1);
+        }
+
+
+
         @Override
         public boolean isEmpty() {
             return true;
@@ -126,20 +136,6 @@ public abstract class LinkedList<E> {
 
         @Override
         public Optional<E> safeGet(int index) {
-            return Optional.empty();
-        }
-
-
-
-        @Override
-        protected E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException {
-            throw new IndexOutOfBoundsException("Index out of bounds");
-        }
-
-
-
-        @Override
-        protected Optional<E> safeGetInternal(int index, int indexOfCurrentElement) {
             return Optional.empty();
         }
 
@@ -212,8 +208,8 @@ public abstract class LinkedList<E> {
         private final LinkedList<E> next;
 
 
-
         private Element(E content, LinkedList<E> next) {
+            super(next.index + 1);
             this.content = content;
             this.next = next;
         }
@@ -229,40 +225,23 @@ public abstract class LinkedList<E> {
 
         @Override
         public E get(int index) throws IndexOutOfBoundsException {
-            int numberOfElements = this.count();
-            return this.getInternal(index, numberOfElements - 1);
-        }
-
-
-
-        @Override
-        public Optional<E> safeGet(int index) {
-            int numberOfElements = this.count();
-
-            return this.safeGetInternal(index, numberOfElements - 1);
-        }
-
-
-
-        @Override
-        protected E getInternal(int index, int indexOfCurrentElement) throws IndexOutOfBoundsException {
-            if (index == indexOfCurrentElement) {
+            if(index == this.index){
                 return this.content;
 
-            } else {
-                return this.next.getInternal(index, indexOfCurrentElement - 1);
+            }else{
+                return this.next.get(index);
             }
         }
 
 
 
         @Override
-        protected Optional<E> safeGetInternal(int index, int indexOfCurrentElement) {
-            if (index == indexOfCurrentElement) {
+        public Optional<E> safeGet(int index) {
+            if(index == this.index){
                 return Optional.of(this.content);
 
-            } else {
-                return this.next.safeGetInternal(index, indexOfCurrentElement - 1);
+            }else{
+                return this.next.safeGet(index);
             }
         }
 
@@ -270,7 +249,7 @@ public abstract class LinkedList<E> {
 
         @Override
         public int count() {
-            return 1 + this.next.count();
+            return this.index + 1;
         }
 
 
