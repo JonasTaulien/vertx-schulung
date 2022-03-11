@@ -1,5 +1,7 @@
 package vertx.java.guice;
 
+import com.google.inject.Inject;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ public class FileReader {
 
 
 
+    @Inject
     public FileReader(ResourceReader resourceReader) {
         this.resourceReader = resourceReader;
     }

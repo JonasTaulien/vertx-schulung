@@ -1,5 +1,7 @@
 package vertx.java.guice;
 
+import com.google.inject.Inject;
+
 import java.util.List;
 
 public class StatisticCalculator {
@@ -8,6 +10,7 @@ public class StatisticCalculator {
 
 
 
+    @Inject
     public StatisticCalculator(FileReader fileReader) {
         this.fileReader = fileReader;
     }
@@ -17,7 +20,7 @@ public class StatisticCalculator {
     /**
      * @param resourceFilePath e.g. "/numbers.txt"
      *
-     * @return sum of all numbers in the given file. If the files is empty this returns 0.
+     * @return sum of all numbers in the given file. If the file is empty this returns 0.
      */
     public int sumLines(String resourceFilePath) {
         List<String> lines = this.fileReader.readLinesFromResourceFile(resourceFilePath);

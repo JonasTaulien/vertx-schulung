@@ -13,6 +13,8 @@ dependencies {
 
     // Use Mockito for testing
     testImplementation("org.mockito:mockito-core:4.4.0")
+
+    implementation("com.google.inject:guice:5.1.0")
 }
 
 tasks.named<Test>("test") {
