@@ -26,7 +26,7 @@ public class Main {
 
         // Mit module, in dem konfiguriert ist, dass SomeClass als Singleton erstellt werden soll: es wird nur eine
         // Instanz erstellt.
-        Injector moduleInjector = Guice.createInjector(new SimpleModule());
+        Injector moduleInjector = Guice.createInjector(new GoogleGuiceConfiguration());
 
         SomeClass moduleA = moduleInjector.getInstance(SomeClass.class);
         SomeClass moduleB = moduleInjector.getInstance(SomeClass.class);
@@ -35,5 +35,9 @@ public class Main {
 
         moduleA.value = 10;
         System.out.println("Singleton Values A: " + moduleA.value + ", B: " + moduleB.value);
+
+        // toInstance() im Module
+        PrefixLogger logger = moduleInjector.getInstance(PrefixLogger.class);
+        logger.log("A message");
     }
 }
