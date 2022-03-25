@@ -14,6 +14,8 @@ public class Main {
                 statisticCalculator.sumLines("/numbers.txt")
         );
 
+
+
         // Singleton: Instanz einer Klasse, aber die einzige, die es jemals geben wird
         // per Default gibt Google Guice IMMER eine NEUE instanz zurück (kein Singleton)
         SomeClass someA = simpleInjector.getInstance(SomeClass.class);
@@ -23,6 +25,8 @@ public class Main {
 
         someA.value = 10;
         System.out.println("Values A: " + someA.value + ", B: " + someB.value + " Same objects:" + (someA == someB));
+
+
 
         // Mit module, in dem konfiguriert ist, dass SomeClass als Singleton erstellt werden soll: es wird nur eine
         // Instanz erstellt.
@@ -36,8 +40,25 @@ public class Main {
         moduleA.value = 10;
         System.out.println("Singleton Values A: " + moduleA.value + ", B: " + moduleB.value);
 
+
+
         // toInstance() im Module
         PrefixLogger logger = moduleInjector.getInstance(PrefixLogger.class);
         logger.log("A message");
+
+
+
+        // @Provides im Module
+        Config config = moduleInjector.getInstance(Config.class);
+        System.out.println("config instance: " + config);
+        logger.log(
+                "CONFIG: sum of file: " +
+                statisticCalculator.sumLines(config.getNumbersResourcePath())
+        );
+
+        logger.log(
+                "CONFIG: sum of file2: " +
+                statisticCalculator.sumLines("/numbers2.txt")
+        );
     }
 }
