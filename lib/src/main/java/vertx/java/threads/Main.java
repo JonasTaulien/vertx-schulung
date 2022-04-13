@@ -36,14 +36,14 @@ public class Main {
         Thread t2 = new Thread(run2);
 
         t1.start();
-        try {
-            t1.join();
-        } catch (InterruptedException e) {
-        }
         t2.start();
 
+        // Synchron
+        dateiInhalt = leseDateiAus();
+        daten = holeDatenVonDatenbank(dateiInhalt);
+        schickeNetzwerkAntwort(daten);
 
-        // Asynchron
+        // Asynchron (callbacks)
         leseDateiAus(
                 (String dateiInhalt) -> holeDatenVonDatenbank(
                         dateiInhalt,
@@ -51,6 +51,7 @@ public class Main {
                 )
         );
 
+        // Asynchron (rxjava)
         leseDateiAus()
                 .flatMap(dateiInhalt -> holeDatenVonDatenbank(dateiInhalt))
                 .flatMap(daten -> schickeNetzwerkAntwort(daten))
