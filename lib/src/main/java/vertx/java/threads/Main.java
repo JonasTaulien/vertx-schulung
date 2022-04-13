@@ -39,22 +39,22 @@ public class Main {
         t2.start();
 
         // Synchron
-        dateiInhalt = leseDateiAus();
-        daten = holeDatenVonDatenbank(dateiInhalt);
-        schickeNetzwerkAntwort(daten);
-
-        // Asynchron (callbacks)
-        leseDateiAus(
-                (String dateiInhalt) -> holeDatenVonDatenbank(
-                        dateiInhalt,
-                        (String[] daten) -> schickeNetzwerkAntwort(daten)
-                )
-        );
-
-        // Asynchron (rxjava)
-        leseDateiAus()
-                .flatMap(dateiInhalt -> holeDatenVonDatenbank(dateiInhalt))
-                .flatMap(daten -> schickeNetzwerkAntwort(daten))
-                .subscribe();
+//        dateiInhalt = leseDateiAus();
+//        daten = holeDatenVonDatenbank(dateiInhalt);
+//        schickeNetzwerkAntwort(daten);
+//
+//        // Asynchron (callbacks)
+//        leseDateiAus(
+//                (String dateiInhalt) -> holeDatenVonDatenbank(
+//                        dateiInhalt,
+//                        (String[] daten) -> schickeNetzwerkAntwort(daten)
+//                )
+//        );
+//
+//        // Asynchron (rxjava)
+//        leseDateiAus()
+//                .flatMap(dateiInhalt -> holeDatenVonDatenbank(dateiInhalt))
+//                .flatMap(daten -> schickeNetzwerkAntwort(daten))
+//                .subscribe();
     }
 }

@@ -15,6 +15,12 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.4.0")
 
     implementation("com.google.inject:guice:5.1.0")
+
+    implementation("io.vertx:vertx-core:4.2.6")
+    implementation("io.vertx:vertx-rx-java2:4.2.6")
+
+    testImplementation("io.vertx:vertx-junit5:4.2.6")
+    testImplementation("io.vertx:vertx-junit5-rx-java2:4.2.6")
 }
 
 tasks.named<Test>("test") {
