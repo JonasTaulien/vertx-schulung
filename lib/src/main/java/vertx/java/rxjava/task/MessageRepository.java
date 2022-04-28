@@ -21,7 +21,7 @@ public class MessageRepository {
                         1,
                         List.of(new MessageAttachment("<doc>Quartalszahlen.xslt</doc>"))
                 ),
-                new Message(2,List.of()),
+                new Message(2, List.of()),
                 new Message(
                         2,
                         Arrays.asList(

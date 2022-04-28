@@ -1,5 +1,6 @@
 package vertx.java.rxjava.task;
 
+import com.google.inject.Inject;
 import io.reactivex.Single;
 
 import java.util.Random;
@@ -10,6 +11,7 @@ public class UserRepository {
 
 
 
+    @Inject
     public UserRepository(Random random) {
         this.random = random;
     }

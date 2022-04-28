@@ -1,5 +1,8 @@
 package vertx.java.rxjava.task;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -15,5 +18,17 @@ public class Main {
         //  - Use the FetchSentAttachmentsForUserProcess in this main
         //      - Fetch all the attachments from user with id 1. Email address does not matter.
         //      - Log the content of each Attachment
+
+        Injector injector = Guice.createInjector(new GoogleGuiceConfiguration());
+        UserCreationProcess userCreationProcess = injector.getInstance(UserCreationProcess.class);
+
+        userCreationProcess.execute("test@test.com")
+                           .subscribe(
+                                   user -> System.out.println("User erfolgreich erstellt. Id: " + user.getId()),
+                                   err -> {
+                                       System.err.println("Fehler bei der Erstellung des Users:");
+                                       err.printStackTrace();
+                                   }
+                           );
     }
 }

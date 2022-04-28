@@ -92,5 +92,55 @@ public class Main {
                                System.out.println("Fehler: " + err);
                            }
                    );
+
+
+        Completable validateRueckgabewert = Completable.complete();
+
+        validateRueckgabewert.subscribe(
+                () -> {
+                    System.out.println("validierung erfolgreich");
+                    Single<String> naechsterSchrittRueckgabewert = Single.just("objeckt");
+
+                    naechsterSchrittRueckgabewert.subscribe(
+                            element -> {
+                                System.out.println("Element angekommen");
+                                //weiter
+                            },
+                            err -> System.err.println("Fehler: " + err.getMessage())
+                    );
+                },
+                err -> System.err.println("Fehler: " + err.getMessage())
+        );
+
+        // -----------------------
+
+        Single<String> naechsterSchrittRueckgabewert = Single.just("objeckt");
+
+        naechsterSchrittRueckgabewert.subscribe(
+                element -> {
+                    System.out.println("Element angekommen");
+
+                    Completable operation = Completable.fromAction(() -> {
+                        System.out.println("Element ist: " + element);
+                    });
+
+                    operation.subscribe(
+                            () -> System.out.println("Operation fertig"),
+                            err -> System.err.println("Fehler: " + err.getMessage())
+                    );
+                },
+                err -> System.err.println("Fehler: " + err.getMessage())
+        );
+
+        naechsterSchrittRueckgabewert.flatMapCompletable(
+                                           element -> Completable.fromAction(() -> {
+                                               System.out.println("Element ist: " + element);
+                                           })
+                                   )
+                                   .subscribe(
+                                           () -> System.out.println("Operation fertig"),
+                                           err -> System.err.println("Fehler: " + err.getMessage())
+                                   );
+
     }
 }

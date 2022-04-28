@@ -1,5 +1,6 @@
 package vertx.java.rxjava.task;
 
+import com.google.inject.Inject;
 import io.reactivex.Completable;
 
 public class EmailValidator {
@@ -8,6 +9,7 @@ public class EmailValidator {
 
 
 
+    @Inject
     public EmailValidator(String emailPattern) {
         this.emailPattern = emailPattern;
     }
@@ -15,7 +17,7 @@ public class EmailValidator {
 
 
     public Completable validate(String email) {
-        if (email.contains("@")) {
+        if (email.matches(this.emailPattern)) {
             return Completable.complete();
 
         } else {
