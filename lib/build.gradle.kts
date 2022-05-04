@@ -19,6 +19,8 @@ dependencies {
     implementation("io.vertx:vertx-core:4.2.6")
     implementation("io.vertx:vertx-rx-java2:4.2.6")
 
+    implementation("ch.qos.logback:logback-classic:1.2.11")
+
     testImplementation("io.vertx:vertx-junit5:4.2.6")
     testImplementation("io.vertx:vertx-junit5-rx-java2:4.2.6")
 }

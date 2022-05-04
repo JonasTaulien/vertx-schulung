@@ -30,5 +30,19 @@ public class Main {
                                        err.printStackTrace();
                                    }
                            );
+
+        FetchSentAttachmentsForUserProcess fetchSentAttachmentsForUserProcess
+                = injector.getInstance(FetchSentAttachmentsForUserProcess.class);
+
+        fetchSentAttachmentsForUserProcess.execute(new User(1, "test@test.de"))
+                                          .subscribe(
+                                                  attachment -> System.out.println(
+                                                          "Attachment: " + attachment.getContent()
+                                                  ),
+                                                  err -> {
+                                                      System.err.println("Failed to load attachments:");
+                                                      err.printStackTrace();
+                                                  }
+                                          );
     }
 }

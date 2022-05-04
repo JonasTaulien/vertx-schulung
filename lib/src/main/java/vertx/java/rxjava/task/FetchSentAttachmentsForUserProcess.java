@@ -2,7 +2,19 @@ package vertx.java.rxjava.task;
 
 import io.reactivex.Observable;
 
+import javax.inject.Inject;
+
 public class FetchSentAttachmentsForUserProcess {
+
+    private final MessageRepository messageRepository;
+
+
+
+    @Inject
+    public FetchSentAttachmentsForUserProcess(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
+    }
+
 
 
     /**
@@ -18,6 +30,9 @@ public class FetchSentAttachmentsForUserProcess {
         //      - Tip: You can convert a List into an Observable by using `Observable.fromIterable`
         //  - Recover from errors by returning an empty Observable
 
-        return null;
+        return this.messageRepository.fetchAllMessages()
+                                     .filter(msg -> msg.wasSendBy(user.getId()))
+                                     .flatMap(msg -> Observable.fromIterable(msg.getAttachments()))
+                                     .onErrorResumeNext((Throwable err) -> Observable.empty());
     }
 }
